@@ -2,7 +2,7 @@
     package="com.example.bluetooth_print_example">
 
     <application
-        android:name="${applicationName}"
+        android:name="io.flutter.app.FlutterApplication"
         android:label="bluetooth_print_example"
         android:icon="@mipmap/ic_launcher">
         <activity

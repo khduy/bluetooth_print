@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:typed_data';
 
 import 'package:flutter/services.dart';
 import 'package:rxdart/rxdart.dart';
@@ -35,7 +36,7 @@ class BluetoothPrint {
   Future<bool> get isOn async =>
       await _channel.invokeMethod('isOn').then<bool>((d) => d);
 
-  Future<bool?> get isConnected async =>
+  Future<bool> get isConnected async =>
       await _channel.invokeMethod('isConnected');
 
   BehaviorSubject<bool> _isScanning = BehaviorSubject.seeded(false);
@@ -43,7 +44,7 @@ class BluetoothPrint {
   Stream<bool> get isScanning => _isScanning.stream;
 
   BehaviorSubject<List<BluetoothDevice>> _scanResults =
-      BehaviorSubject.seeded([]);
+      BehaviorSubject.seeded(<BluetoothDevice>[]);
 
   Stream<List<BluetoothDevice>> get scanResults => _scanResults.stream;
 
@@ -51,7 +52,7 @@ class BluetoothPrint {
 
   /// Gets the current state of the Bluetooth module
   Stream<int> get state async* {
-    yield await _channel.invokeMethod('state').then((s) => s);
+    yield (await _channel.invokeMethod('state') ?? -1);
 
     yield* _stateChannel.receiveBroadcastStream().map((s) => s);
   }
@@ -59,7 +60,7 @@ class BluetoothPrint {
   /// Starts a scan for Bluetooth Low Energy devices
   /// Timeout closes the stream after a specified [Duration]
   Stream<BluetoothDevice> scan({
-    Duration? timeout,
+    Duration timeout,
   }) async* {
     if (_isScanning.value == true) {
       throw Exception('Another scan is already in progress.');
@@ -112,7 +113,7 @@ class BluetoothPrint {
   }
 
   Future startScan({
-    Duration? timeout,
+    Duration timeout,
   }) async {
     await scan(timeout: timeout).drain();
     return _scanResults.value;
@@ -156,4 +157,12 @@ class BluetoothPrint {
   }
 
   Future<dynamic> printTest() => _channel.invokeMethod('printTest');
+
+  Future<dynamic> rawBytes(Map<String, dynamic> config, List<int> data) {
+    Map<String, Object> args = Map();
+    args['config'] = config;
+    args['data'] = Uint8List.fromList(data);
+    _channel.invokeMethod('rawBytes', args);
+    return Future.value(true);
+  }
 }

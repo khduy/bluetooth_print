@@ -6,10 +6,10 @@ part 'bluetooth_print_model.g.dart';
 class BluetoothDevice {
   BluetoothDevice();
 
-  String? name;
-  String? address;
-  int? type = 0;
-  bool? connected = false;
+  String name;
+  String address;
+  int type = 0;
+  bool connected = false;
 
   factory BluetoothDevice.fromJson(Map<String, dynamic> json) =>
       _$BluetoothDeviceFromJson(json);
@@ -43,39 +43,39 @@ class LineText {
   static const int ALIGN_RIGHT = 2;
 
   /// print type ,inculde['text','barcode','qrcode','image']
-  final String? type;
+  final String type;
 
   /// ['text','barcode','qrcode','image'] need print content
-  final String? content;
+  final String content;
 
   /// ['qrcode'] qrcode size ,only when type is qrcode
-  final int? size;
+  final int size;
 
   /// ['text'] text align
-  final int? align;
+  final int align;
 
   /// ['text'] double
-  final int? weight;
-  final int? width;
-  final int? height;
+  final int weight;
+  final int width;
+  final int height;
 
   /// ['text'] absolute position from line begin
-  final int? absolutePos;
+  final int absolutePos;
 
   /// ['text'] relative position from last content
-  final int? relativePos;
+  final int relativePos;
 
   /// ['text'] font zoom level, include 1-8
-  final int? fontZoom;
+  final int fontZoom;
 
   /// ['text'] show underline
-  final int? underline;
+  final int underline;
 
   /// ['text'] print linebreak
-  final int? linefeed;
+  final int linefeed;
 
-  final int? x;
-  final int? y;
+  final int x;
+  final int y;
 
   factory LineText.fromJson(Map<String, dynamic> json) =>
       _$LineTextFromJson(json);
