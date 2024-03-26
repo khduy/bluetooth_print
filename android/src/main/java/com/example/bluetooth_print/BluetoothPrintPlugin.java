@@ -216,9 +216,6 @@ public class BluetoothPrintPlugin implements FlutterPlugin, ActivityAware, Metho
       case "printTest":
         printTest(result);
         break;
-      case "rawBytes":
-        printRawBytes(call, result);
-        break;
       default:
         result.notImplemented();
         break;
@@ -402,39 +399,6 @@ public class BluetoothPrintPlugin implements FlutterPlugin, ActivityAware, Metho
         }
       }
     });
-
-  }
-
-  private void printRawBytes(MethodCall call, Result result) {
-    Map<String, Object> args = call.arguments();
-
-    final DeviceConnFactoryManager deviceConnFactoryManager = DeviceConnFactoryManager.getDeviceConnFactoryManagers().get(curMacAddress);
-    if (deviceConnFactoryManager == null || !deviceConnFactoryManager.getConnState()) {
-      result.error("not connect", "state not right", null);
-    }
-
-    if (args != null && args.containsKey("config") && args.containsKey("data")) {
-      final Map<String,Object> config = (Map<String,Object>)args.get("config");
-      final byte [] bytes = (byte [])args.get("data");
-      if(bytes == null){
-        return;
-      }
-
-      threadPool = ThreadPool.getInstantiation();
-      threadPool.addSerialTask(new Runnable() {
-        @Override
-        public void run() {
-          assert deviceConnFactoryManager != null;
-          PrinterCommand printerCommand = deviceConnFactoryManager.getCurrentPrinterCommand();
-
-          if (printerCommand == PrinterCommand.ESC) {
-            deviceConnFactoryManager.sendByteDataImmediately(bytes);
-          }
-        }
-      });
-    }else{
-      result.error("please add config or data", "", null);
-    }
 
   }
 

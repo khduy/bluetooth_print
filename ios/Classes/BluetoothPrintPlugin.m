@@ -125,17 +125,6 @@
      }
   }else if([@"printTest" isEqualToString:call.method]) {
      @try {
-       
-       result(nil);
-     } @catch(FlutterError *e) {
-       result(e);
-     }
-  } else if([@"rawBytes" isEqualToString:call.method]) {
-     @try {
-       NSDictionary *args = [call arguments];
-       NSDictionary *config = [args objectForKey:@"config"];
-       FlutterStandardTypedData *list = [args objectForKey:@"data"];
-       [Manager write:list.data];
        result(nil);
      } @catch(FlutterError *e) {
        result(e);
@@ -181,7 +170,8 @@
         }else if([@"image" isEqualToString:type]){
             NSData *decodeData = [[NSData alloc] initWithBase64EncodedString:content options:0];
             UIImage *image = [UIImage imageWithData:decodeData];
-            [command addBitmapwithX:[x intValue] withY:[y intValue] withMode:0 withWidth:width ,withHeight: height,withImage:image];
+            int intValue = [width intValue];
+            [command addBitmapwithX:[x intValue] withY:[y intValue] withMode:0 withWidth:intValue withImage:image];
         }
        
     }
@@ -245,7 +235,8 @@
         }else if([@"image" isEqualToString:type]){
             NSData *decodeData = [[NSData alloc] initWithBase64EncodedString:content options:0];
             UIImage *image = [UIImage imageWithData:decodeData];
-            [command addOriginrastBitImage:image width:width, height:height ];
+            int intValue = [width intValue];
+            [command addOriginrastBitImage:image width:intValue];
         }
         
         if([linefeed isEqualToNumber:@1]){
