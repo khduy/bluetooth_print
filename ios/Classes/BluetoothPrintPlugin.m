@@ -129,7 +129,17 @@
      } @catch(FlutterError *e) {
        result(e);
      }
-  }
+  } else if([@"rawBytes" isEqualToString:call.method]) {
+     @try {
+       NSDictionary *args = [call arguments];
+       NSDictionary *config = [args objectForKey:@"config"];
+       FlutterStandardTypedData *list = [args objectForKey:@"data"];
+       [Manager write:list.data];
+       result(nil);
+     } @catch(FlutterError *e) {
+       result(e);
+     }
+  } 
 }
 
 -(NSData *)mapToTscCommand:(NSDictionary *) args {

@@ -157,4 +157,12 @@ class BluetoothPrint {
   }
 
   Future<dynamic> printTest() => _channel.invokeMethod('printTest');
+
+  Future<dynamic> rawBytes(Map<String, dynamic> config, List<int> data) {
+    Map<String, Object> args = Map();
+    args['config'] = config;
+    args['data'] = Uint8List.fromList(data);
+    _channel.invokeMethod('rawBytes', args);
+    return Future.value(true);
+  }
 }
